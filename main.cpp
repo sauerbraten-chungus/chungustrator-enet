@@ -1,4 +1,5 @@
 #include <fmt/core.h>
+#include <string.h>
 #include <enet/enet.h>
 
 int main()
@@ -42,7 +43,12 @@ int main()
   {
     enet_peer_reset(peer);
     fmt::print("Connection to host has failed.\n");
+    exit (EXIT_FAILURE);
   }
+
+  ENetPacket* packet = enet_packet_create("data", strlen("data"), ENET_PACKET_FLAG_RELIABLE);
+  enet_peer_send(peer, 2, packet);
+  enet_packet_destroy(packet);
   
   enet_host_destroy(client);
   return 0;
