@@ -3,7 +3,7 @@
 #include <enet/enet.h>
 
 int main()
-{  
+{
   if (enet_initialize() != 0)
   {
     fmt::print("An error occured while initializing ENet.\n");
@@ -19,7 +19,7 @@ int main()
     fmt::print("An error occured while initializng an ENet client host.\n");
     exit (EXIT_FAILURE);
   }
-  
+
   ENetAddress address;
   ENetEvent event;
   ENetPeer* peer;
@@ -47,10 +47,11 @@ int main()
   }
   enet_host_flush(client);
 
-  ENetPacket* packet = enet_packet_create("data", strlen("data"), ENET_PACKET_FLAG_RELIABLE);
-  
+  const char data[] = "data\0bruh\0moment\0";
+  ENetPacket* packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_RELIABLE);
+
   fmt::print("Sending test packet to server\n");
-  int packet_sent = enet_peer_send(peer, 0, packet);
+  int packet_sent = enet_peer_send(peer, 2, packet);
   if (packet_sent != 0)
   {
     fmt::print("Boy what the hell\n");
