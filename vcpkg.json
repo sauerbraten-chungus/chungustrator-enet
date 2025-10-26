@@ -4,6 +4,7 @@
       "name": "enet",
       "version>=": "1.3.17"
     },
-    "fmt"
+    "fmt",
+    "grpc"
   ]
 }
