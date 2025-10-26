@@ -1,3 +1,5 @@
+*.pb.h
+*.pb.cc
 .cache/
 build/
 vcpkg_installed/
