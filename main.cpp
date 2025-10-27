@@ -11,19 +11,19 @@
 #include <grpcpp/grpcpp.h>
 #include <string>
 
-class ChungusRPC final : public ChungusEnet::Service {
-  public: 
+class ChungusRPC final : public chungus::ChungusEnet::Service {
+  public:
     grpc::Status Hello(
       grpc::ServerContext* context,
-      const Meow* request,
-      Nya* response
+      const chungus::Meow* request,
+      chungus::Nya* response
     ) override {
       response->set_data("hello");
       return grpc::Status::OK;
     }
 };
 
-void RunServer() {  
+void RunServer() {
   std::string server_address = "0.0.0.0:50051";
 
   ChungusRPC service;
