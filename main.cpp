@@ -1,13 +1,47 @@
+#include "proto/chungus.grpc.pb.h"
+#include "proto/chungus.pb.h"
 #include <fmt/core.h>
+#include <grpcpp/security/server_credentials.h>
+#include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
+#include <grpcpp/server_context.h>
+#include <grpcpp/support/status.h>
 #include <string.h>
 #include <enet/enet.h>
+#include <grpcpp/grpcpp.h>
+#include <string>
 
-int main()
-{
+class ChungusRPC final : public ChungusEnet::Service {
+  public: 
+    grpc::Status Hello(
+      grpc::ServerContext* context,
+      const Meow* request,
+      Nya* response
+    ) override {
+      response->set_data("hello");
+      return grpc::Status::OK;
+    }
+};
+
+void RunServer() {  
+  std::string server_address = "0.0.0.0:50051";
+
+  ChungusRPC service;
+
+  grpc::ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&service);
+  std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+  fmt::println("Server listening on {}", server_address);
+
+  server->Wait();
+}
+
+ENetHost* RunENet() {
   if (enet_initialize() != 0)
   {
     fmt::print("An error occured while initializing ENet.\n");
-    return EXIT_FAILURE;
+    exit (EXIT_FAILURE);
   }
   atexit (enet_deinitialize);
 
@@ -62,6 +96,13 @@ int main()
   }
   enet_host_flush(client);
 
-  enet_host_destroy(client);
+  return client;
+}
+
+int main()
+{
+  // ENetHost* client = RunENet();
+  RunServer();
+  // enet_host_destroy(client);
   return 0;
 }

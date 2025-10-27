@@ -6,6 +6,6 @@ find_package(fmt CONFIG REQUIRED)
 find_package(unofficial-enet CONFIG REQUIRED)
 find_package(grpc CONFIG REQUIRED)
 
-add_executable(chungustrator-enet main.cpp)
+add_executable(chungustrator-enet main.cpp proto/chungus.grpc.pb.cc proto/chungus.pb.cc)
 
 target_link_libraries(chungustrator-enet PRIVATE unofficial::enet::enet fmt::fmt gRPC::grpc++)
