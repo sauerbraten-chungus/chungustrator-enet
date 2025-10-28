@@ -1,5 +1,5 @@
-#include "proto/chungus.grpc.pb.h"
-#include "proto/chungus.pb.h"
+#include "proto/chungustrator_enet.grpc.pb.h"
+#include "proto/chungustrator_enet.pb.h"
 #include <fmt/core.h>
 #include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
@@ -11,14 +11,14 @@
 #include <grpcpp/grpcpp.h>
 #include <string>
 
-class ChungusRPC final : public chungus::ChungusEnet::Service {
+class AuthCodeService final : public chungustrator_enet::AuthCodeService::Service {
   public:
-    grpc::Status Hello(
+    grpc::Status SendAuthCodes(
       grpc::ServerContext* context,
-      const chungus::Meow* request,
-      chungus::Nya* response
+      const chungustrator_enet::AuthCodeRequest* request,
+      chungustrator_enet::AuthCodeResponse* response
     ) override {
-      response->set_data("hello");
+      response->set_msg("Received");
       return grpc::Status::OK;
     }
 };
@@ -26,7 +26,7 @@ class ChungusRPC final : public chungus::ChungusEnet::Service {
 void RunServer() {
   std::string server_address = "0.0.0.0:50051";
 
-  ChungusRPC service;
+  AuthCodeService service;
 
   grpc::ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());

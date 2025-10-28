@@ -6,7 +6,7 @@ find_package(fmt CONFIG REQUIRED)
 find_package(unofficial-enet CONFIG REQUIRED)
 find_package(grpc CONFIG REQUIRED)
 
-add_executable(chungustrator-enet main.cpp proto/chungus.grpc.pb.cc proto/chungus.pb.cc)
+add_executable(chungustrator-enet main.cpp proto/chungustrator_enet.grpc.pb.cc proto/chungustrator_enet.pb.cc)
 
 target_include_directories(chungustrator-enet PRIVATE ${CMAKE_SOURCE_DIR})
 
