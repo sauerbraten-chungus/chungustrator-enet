@@ -1,4 +1,4 @@
-#include "auth_code_service.h"
+#include "verification_code_service.h"
 #include <fmt/core.h>
 #include <grpcpp/server_builder.h>
 #include <enet/enet.h>
@@ -8,7 +8,7 @@
 void RunServer() {
     std::string server_address = "0.0.0.0:50051";
 
-    AuthCodeService service;
+    VerificationCodeService service;
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());

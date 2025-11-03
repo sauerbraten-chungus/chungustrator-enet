@@ -1,13 +1,13 @@
-#include "auth_code_service.h"
+#include "verification_code_service.h"
 #include "enet_client.h"
 #include <chrono>
 #include <fmt/base.h>
 #include <thread>
 
-grpc::Status AuthCodeService::SendAuthCodes(
+grpc::Status VerificationCodeService::SendVerificationCodes(
     grpc::ServerContext* context,
-    const chungustrator_enet::AuthCodeRequest* request,
-    chungustrator_enet::AuthCodeResponse* response
+    const chungustrator_enet::VerificationCodeRequest* request,
+    chungustrator_enet::VerificationCodeResponse* response
 ) {
     const auto& codes = request->codes();
     for (const auto& pair : codes) {
