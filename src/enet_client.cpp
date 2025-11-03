@@ -2,7 +2,8 @@
 
 void RunENet(
     const char* game_server_address,
-    int game_server_port
+    int game_server_port,
+    std::string buffer
 ) {
     ENetHost* host;
 
@@ -38,8 +39,7 @@ void RunENet(
     }
     enet_host_flush(host);
 
-    const char data[] = "data\0bruh\0moment\0";
-    ENetPacket* packet = enet_packet_create(data, sizeof(data), ENET_PACKET_FLAG_RELIABLE);
+    ENetPacket* packet = enet_packet_create(buffer.data(), buffer.size(), ENET_PACKET_FLAG_RELIABLE);
 
     fmt::print("Sending test packet to server\n");
     int packet_sent = enet_peer_send(peer, 2, packet);

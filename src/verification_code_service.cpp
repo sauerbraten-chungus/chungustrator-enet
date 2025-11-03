@@ -10,13 +10,17 @@ grpc::Status VerificationCodeService::SendVerificationCodes(
     chungustrator_enet::VerificationCodeResponse* response
 ) {
     const auto& codes = request->codes();
-    for (const auto& pair : codes) {
-        std::cout << pair.first << ": " << pair.second << std::endl;
+    std::string buffer;
+    for (const auto& [id, code] : codes) {
+        buffer += id + ":" + code + "\0";
     }
-    std::thread([codes]{
+
+    std::thread([buffer]{
             std::this_thread::sleep_for(std::chrono::seconds(10));
-            RunENet("127.0.0.1", 28785);
+            RunENet("127.0.0.1", 28785, buffer);
         }).detach();
+
+
 
     response->set_msg("Received");
     return grpc::Status::OK;
