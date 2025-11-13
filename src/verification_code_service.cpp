@@ -11,8 +11,9 @@ grpc::Status VerificationCodeService::SendVerificationCodes(
 ) {
     const auto& codes = request->codes();
     std::string buffer;
+    // buffer += std::to_string(codes.size()) + "\0";
     for (const auto& [id, code] : codes) {
-        buffer += id + ":" + code + "\0";
+        buffer += id + ":" + code + ",";
     }
 
     std::thread([buffer]{
