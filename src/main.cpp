@@ -24,44 +24,50 @@ int main() {
     if (enet_initialize() != 0) {
         fmt::print("An error occured when initializing ENet.\n");
     }
-    RunServer();
+    // RunServer();
 
     ENetAddress server_address;
     ENetHost *server;
     server_address.host = ENET_HOST_ANY;
-    server_address.port = 1234;
+    // enet_address_set_host(&server_address, "127.0.0.1");
+    server_address.port = 30000;
 
     server = enet_host_create(&server_address, 32, 2, 0, 0);
+    if (server == nullptr) {
+        fmt::println("An error occurred while creating the ENet server host.");
+        return 1;
+    }
+    fmt::println("ENet server listening on {}:{}", server_address.host, server_address.port);
+    fmt::println("Waiting for connections...");
+
     ENetEvent event;
-    while(enet_host_service(server, &event, 100) > 0) {
-        switch (event.type) {
-            case ENET_EVENT_TYPE_CONNECT:
-                fmt::println("A new client connected from %x:%u.\n",
-                    event.peer->address.host,
-                    event.peer->address.port
-                );
-                /* Store any relevant client information here. */
-                // event.peer->data = "Client information";
-                break;
-            case ENET_EVENT_TYPE_RECEIVE:
-                fmt::println("A packet of length %u containing %s was received from %s on channel %u.\n",
-                    event.packet->dataLength,
-                    event.packet->data,
-                    event.peer->data,
-                    event.channelID
-                );
-                /* Clean up the packet now that we're done using it. */
-                enet_packet_destroy (event.packet);
-                break;
-            case ENET_EVENT_TYPE_DISCONNECT:
-                fmt::println("%s disconnected.", event.peer->data);
-                /* Reset the peer's client information. */
-                event.peer -> data = NULL;
-                break;
-            case ENET_EVENT_TYPE_NONE:
-                fmt::println("idk bruh");
+    while(true) {
+        int result = enet_host_service(server, &event, 1000);
+        if (result < 0) {
+            fmt::println("Error in enet_host_service");
+            break;
+        }
+
+        if (result > 0) {
+            fmt::println("Event received: type={}", (int)event.type);
+            switch (event.type) {
+                case ENET_EVENT_TYPE_CONNECT:
+                    fmt::println("awesome");
+                    break;
+                case ENET_EVENT_TYPE_RECEIVE:
+                    fmt::println("Received packet");
+                    enet_packet_destroy (event.packet);
+                    break;
+                case ENET_EVENT_TYPE_DISCONNECT:
+                    fmt::println("Client disconnected.");
+                    break;
+                case ENET_EVENT_TYPE_NONE:
+                    break;
+            }
         }
     }
+    enet_host_destroy(server);
+    enet_deinitialize();
 
     return 0;
 }
