@@ -36,7 +36,7 @@ int main() {
         fmt::println("An error occurred while creating the ENet server host.");
         return 1;
     }
-    fmt::println("ENet server listening on port {}",address.host, address.port);
+    fmt::println("ENet server listening on port {}", address.port);
     fmt::println("Waiting for connections...");
 
     ENetEvent event;
