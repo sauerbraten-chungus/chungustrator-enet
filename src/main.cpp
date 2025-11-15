@@ -4,7 +4,14 @@
 #include <grpcpp/server_builder.h>
 #include <enet/enet.h>
 
+void print_packet_data(ENetPacket* packet) {
+    uint8_t *buffer = packet->data;
 
+    uint8_t flag = *buffer++;
+    std::string test = std::string(reinterpret_cast<char*>(buffer));
+
+    fmt::println("flag: {} string: {}", flag, test);
+}
 
 void RunServer() {
     std::string server_address = "0.0.0.0:50051";
@@ -47,6 +54,7 @@ int main() {
                 break;
             case ENET_EVENT_TYPE_RECEIVE:
                 fmt::println("Received packet");
+                print_packet_data(event.packet);
                 enet_packet_destroy (event.packet);
                 break;
             case ENET_EVENT_TYPE_DISCONNECT:
